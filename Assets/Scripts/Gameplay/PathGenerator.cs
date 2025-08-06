@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.ObjectPoolHandling;
@@ -7,66 +8,122 @@ namespace Game.Gameplay
 {
     public class PathGenerator : MonoBehaviour
     {
-        [SerializeField] private ChunksData[] chunksRelatedData;
+        [Header("Chunk Settings: ")]
+        [SerializeField] private Chunk chunkPrefab;
+        [SerializeField] private SpawnData[] chunksSpawnData;
 
-        private Dictionary<ChunkShape, List<ObjectPool<Chunk>>> splinesDict;
+        [Header("Straight Path Settings: ")]
+        [Min(5)]
+        [SerializeField] private int straightPathCount = 5;
+
+        [Header("Other Settings:")]
+        [Min(5)]
+        [SerializeField] private int otherPathCount = 5;
+
+        private Dictionary<int, ObjectPool<Chunk>> splinesDict;
         private bool isGenerated;
+        private Vector3 lastSpawnPosition = Vector3.zero;
 
+        private void SpawnStraightPaths()
+        {
+            var shapeCurve = chunksSpawnData[0].shapeCurve;
+            var meshCount = chunksSpawnData[0].meshCount;
+            var meshes = chunksSpawnData[0].meshes;
+            lastSpawnPosition = transform.position;
+
+            var length = chunksSpawnData[0].length;
+            for(int i = 0; i < straightPathCount; i++)
+            {
+                var chunk = splinesDict[chunksSpawnData[0].GetHashCode()].Get();
+                chunk.transform.position = lastSpawnPosition;
+                var splinePoints = GetSplinePoints(lastSpawnPosition, shapeCurve, meshCount, length);
+                chunk.Initialize(splinePoints, meshes, meshCount);
+                lastSpawnPosition = chunk.EndPoint.position;
+            }
+        }
+
+        private void SpawnRandomPaths()
+        {
+            int randomIndex = Random.Range(1, chunksSpawnData.Length);
+            var randomSpawnData = chunksSpawnData[randomIndex];
+            var shapeCurve = randomSpawnData.shapeCurve;
+            var meshCount = randomSpawnData.meshCount;
+            var meshes = randomSpawnData.meshes;
+            
+            var length = randomSpawnData.length;
+
+            for (int i = 0; i < otherPathCount; i++)
+            {
+                var chunk = splinesDict[randomSpawnData.GetHashCode()].Get();
+                chunk.SetType(Spline.Type.CatmullRom);
+                chunk.SetSpace(SplineComputer.Space.World);
+
+                chunk.transform.position = lastSpawnPosition;
+                var splinePoints = GetSplinePoints(lastSpawnPosition, shapeCurve, meshCount, length);
+                chunk.Initialize(splinePoints, meshes, meshCount);
+                lastSpawnPosition = chunk.EndPoint.position;
+            }
+        }
+
+        private SplinePoint[] GetSplinePoints(Vector3 origin, AnimationCurve shapeCurve, int pointsCount, float length)
+        {
+            var splinePoints = new SplinePoint[pointsCount];
+            float percent = 0.0f;
+            float increment = 1.0f / (float)pointsCount;
+            for(int i = 0; i <  pointsCount; i++)
+            {
+                var positionZ = percent * length;
+                var positionX = shapeCurve.Evaluate(percent) * length;
+                var calculatedPos = origin + new Vector3(positionX, 0.0f, positionZ);
+                
+                Vector3 direction = (i - 1 >= 0) ? (calculatedPos - splinePoints[i - 1].position).normalized: calculatedPos.normalized;
+
+                var point = new SplinePoint();
+                point.type = SplinePoint.Type.SmoothFree;
+                point.SetNormalX(0.0f);
+                point.SetNormalY(1.0f);
+                point.SetNormalZ(0.0f);
+
+                point.SetPosition(calculatedPos);
+                point.SetTangentPosition(direction);
+
+                splinePoints[i] = point;
+                percent += increment;
+            }
+            return splinePoints;
+        }
 
         private void Awake()
         {
-            splinesDict = new Dictionary<ChunkShape, List<ObjectPool<Chunk>>>();
+            splinesDict = new Dictionary<int, ObjectPool<Chunk>>();
         }
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
         {
             if(!isGenerated)
             {
-                foreach(var data in chunksRelatedData)
+                foreach(var data in chunksSpawnData)
                 {
-                    var shape = data.shape;
-                    var splines = data.chunks;
-                    var count = data.maxCount;
+                    var hashCode = data.GetHashCode();
+                    var shapeCurve = data.shapeCurve;
+                    var count = data.chunkCount;
 
-                    var list = new List<ObjectPool<Chunk>>();
-                    foreach(var spline in splines)
-                    {
-                        var pool = new ObjectPool<Chunk>(() => CreateSpline(spline),
-                                                              OnSplineGet,
-                                                              OnSplineReturnToPool,
-                                                              OnSplineDestroy,
-                                                              count);
-
-                        list.Add(pool);
-                    }
-
-                    splinesDict.Add(shape, list);
+                    var pool = new ObjectPool<Chunk>(() => CreateChunk(chunkPrefab),
+                                                           OnChunkGet,
+                                                           OnChunkReturnToPool,
+                                                           OnChunkDestroy,
+                                                           count);
+                    
+                    splinesDict.Add(hashCode, pool);
                 }
 
-                Vector3 spawnPosition = transform.position;
-                Vector3 forwardDirection = transform.forward;
+                SpawnStraightPaths();
+                SpawnRandomPaths();
 
-                foreach(var data in chunksRelatedData)
-                {
-                    var shape = data.shape;
-                    for(var i = 0; i < 5; i++)
-                    {
-                        var list = splinesDict[shape];
-                        var spline = list[Random.Range(0, list.Count)].Get();
-                        var mesh = spline.GetComponent<SplineMesh>();
-                        spline.transform.position = spawnPosition;
-                        spline.transform.forward = forwardDirection;
-
-                        spawnPosition = spline.EndPoint.position;
-                        forwardDirection = spline.EndPoint.forward;
-                        mesh.Bake(false, false);
-                        
-                    }
-                }
                 isGenerated = true;
             }
         }
-        private Chunk CreateSpline(Chunk chunk)
+        private Chunk CreateChunk(Chunk chunk)
         {
             var instance = Instantiate(chunk, Vector3.zero, Quaternion.identity);
             instance.transform.parent = transform;
@@ -74,17 +131,17 @@ namespace Game.Gameplay
             return instance;
         }
 
-        private void OnSplineGet(Chunk chunk)
+        private void OnChunkGet(Chunk chunk)
         {
             chunk.gameObject.SetActive(true);
         }
 
-        private void OnSplineReturnToPool(Chunk chunk)
+        private void OnChunkReturnToPool(Chunk chunk)
         {
             chunk.gameObject.SetActive(false);
         }
 
-        private void OnSplineDestroy(Chunk chunk)
+        private void OnChunkDestroy(Chunk chunk)
         {
             Destroy(chunk.gameObject);
         }
