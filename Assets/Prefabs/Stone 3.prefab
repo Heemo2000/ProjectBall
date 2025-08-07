@@ -96,6 +96,8 @@ GameObject:
   m_Component:
   - component: {fileID: 935617648250333316}
   - component: {fileID: -8138320763296832943}
+  - component: {fileID: 4274423429287476463}
+  - component: {fileID: 1746887606317271137}
   m_Layer: 0
   m_Name: Stone 3
   m_TagString: Untagged
@@ -144,3 +146,36 @@ MonoBehaviour:
     bendSprite: 0
     bendPolygonCollider: 0
     applyMeshColors: 0
+--- !u!114 &4274423429287476463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4128665397331829560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bb47e7067ca6de4390ce1f5b3272fcd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &1746887606317271137
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4128665397331829560}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.58287746, y: 0.97219175, z: 0.6831636}
+  m_Center: {x: 0.0019861758, y: 0.3595198, z: -0.019802243}

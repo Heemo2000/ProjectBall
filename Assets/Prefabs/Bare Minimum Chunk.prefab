@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 3471968625465347571}
   - component: {fileID: 1612312496744752180}
   - component: {fileID: 8220163176832579523}
-  m_Layer: 0
+  - component: {fileID: 7717781277434514742}
+  m_Layer: 7
   m_Name: Bare Minimum Chunk
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,12 +153,12 @@ MonoBehaviour:
     _isRoot: 0
   bounds:
     center: {x: 0, y: 0, z: 9.580736}
-    extents: {x: 4, y: 1.0000014, z: 9.580736}
-    max: {x: 4, y: 1.0000014, z: 19.161472}
-    min: {x: -4, y: -1.0000014, z: 0}
-    size: {x: 8, y: 2.0000029, z: 19.161472}
+    extents: {x: 4, y: 1.000001, z: 9.580736}
+    max: {x: 4, y: 1.000001, z: 19.161472}
+    min: {x: -4, y: -1.000001, z: 0}
+    size: {x: 8, y: 2.000002, z: 19.161472}
   builders: []
-  unpacked: 0
+  unpacked: 1
   alwaysDraw: 0
   drawGeneratedSpline: 1
   drawGeneratedSamples: 1
@@ -165,7 +166,21 @@ MonoBehaviour:
   drawEntranceAndExit: 1
   drawBounds: 1
   drawCustomPaths: 1
-  editorChildCount: 2
+  editorChildCount: 1
+--- !u!114 &7717781277434514742
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 920649477280287630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fe2f0fa75719ec4bab48d9a5c042b42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  width: 8
+  height: 2
 --- !u!1 &8611852800172864042
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +193,7 @@ GameObject:
   - component: {fileID: 5433444822788532021}
   - component: {fileID: 7819249571827946495}
   - component: {fileID: 6910732775422161673}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cube_Pathfbx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
