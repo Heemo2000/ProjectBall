@@ -151,11 +151,11 @@ MonoBehaviour:
     - {fileID: 6910732775422161673}
     _isRoot: 0
   bounds:
-    center: {x: 0, y: 0, z: 4.790368}
-    extents: {x: 4, y: 1.0000006, z: 4.790368}
-    max: {x: 4, y: 1.0000006, z: 9.580736}
-    min: {x: -4, y: -1.0000006, z: 0}
-    size: {x: 8, y: 2.0000012, z: 9.580736}
+    center: {x: 0, y: 0, z: 9.580736}
+    extents: {x: 4, y: 1.0000014, z: 9.580736}
+    max: {x: 4, y: 1.0000014, z: 19.161472}
+    min: {x: -4, y: -1.0000014, z: 0}
+    size: {x: 8, y: 2.0000029, z: 19.161472}
   builders: []
   unpacked: 0
   alwaysDraw: 0
@@ -194,8 +194,8 @@ Transform:
   m_GameObject: {fileID: 8611852800172864042}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0, y: -0, z: 4.8}
-  m_LocalScale: {x: 400, y: 478.0736, z: 100}
+  m_LocalPosition: {x: 0, y: 0, z: 9.6}
+  m_LocalScale: {x: 400, y: 956.1472, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3471968625465347571}
@@ -231,7 +231,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: 5672e03bfb464f04881417b358666007, type: 3}
+  - {fileID: 2100000, guid: af9893132c7e5d648960a97039ce0115, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
