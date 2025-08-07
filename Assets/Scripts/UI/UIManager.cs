@@ -45,7 +45,6 @@ namespace Game
         public void ShowMainMenuScreen()
         {
             mainMenuScreen.SetActive(true);
-
             loadingScreen.SetActive(false);
             gameplayScreen.SetActive(false);
             pauseMenuScreen.SetActive(false);
