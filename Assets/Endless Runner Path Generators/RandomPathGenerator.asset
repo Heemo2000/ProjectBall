@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pathType: 2
   sampleRate: 10
-  controlPointsPerSegment: 5
+  controlPointsPerSegment: 10
   normalInterpolation:
     serializedVersion: 2
     m_Curve: []
@@ -24,11 +24,38 @@ MonoBehaviour:
   customNormalInterpolation: 0
   valueInterpolation:
     serializedVersion: 2
-    m_Curve: []
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0.022157094
+      outSlope: 0.022157094
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.07088025
+    - serializedVersion: 3
+      time: 0.6001683
+      value: 0.0008239746
+      inSlope: -0.0011867011
+      outSlope: -0.0011867011
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.035974525
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  customValueInterpolation: 0
+  customValueInterpolation: 1
   useCustomNormalDirection: 0
   customNormalDirection: {x: 0, y: 1, z: 0}
   startOrientation: {x: 0, y: 0, z: 0}
@@ -43,13 +70,13 @@ MonoBehaviour:
   useSizes: 0
   minOrientation: {x: -1, y: -90, z: 0}
   maxOrientation: {x: 1, y: 90, z: 0}
-  minRandomStep: {x: 5, y: 10, z: 0}
-  maxRandomStep: {x: 10, y: 20, z: 0}
+  minRandomStep: {x: 5, y: 20, z: 0}
+  maxRandomStep: {x: 10, y: 40, z: 0}
   minTurnRate: {x: 5, y: 5, z: 0}
   maxTurnRate: {x: 5, y: 20, z: 0}
-  startTargetOrientation: {x: 0, y: 0, z: 0}
+  startTargetOrientation: {x: 0, y: 50, z: 0}
   useStartPitchTarget: 1
-  useStartYawTarget: 1
+  useStartYawTarget: 0
   useStartRollTarget: 0
   minColor:
     serializedVersion: 2
