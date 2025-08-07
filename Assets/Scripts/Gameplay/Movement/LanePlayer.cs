@@ -1,10 +1,8 @@
-
 using Dreamteck.Forever;
 using Game.Core;
 using Game.Gameplay;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SocialPlatforms.Impl;
 
 public class LanePlayer : MonoBehaviour
 {
@@ -21,7 +19,6 @@ public class LanePlayer : MonoBehaviour
     [SerializeField] float maxJumpForce = 12f;
     [SerializeField] float jumpChargeRate = 5f;
 
-    [Header("Movement Settings")]
     private float currentSpeed;
     private int currentLane = 2;
 
@@ -38,17 +35,11 @@ public class LanePlayer : MonoBehaviour
 
     private float holdJumpForce;
 
-    public UIManager uiManager; // Reference to UIManager for score updates
-    public int[] speedUpgradeThresholds = { 300, 700, 1200, 1500 };
-    private int currentThresholdIndex = 0;
-    public float speedMultiplier = 2f;
-
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         runner = GetComponent<LaneRunner>();
         inputActions = new InputActions();
-
     }
 
     void OnEnable()
@@ -95,9 +86,9 @@ public class LanePlayer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.transform.TryGetComponent<Obstacle>(out Obstacle obstacle))
+        if (other.transform.TryGetComponent<Obstacle>(out Obstacle obstacle))
         {
-            if(ServiceLocator.ForSceneOf(this).TryGetService<GameManager>(out GameManager gameManager))
+            if (ServiceLocator.ForSceneOf(this).TryGetService<GameManager>(out GameManager gameManager))
             {
                 gameManager.OnGameOver?.Invoke();
             }
@@ -164,16 +155,5 @@ public class LanePlayer : MonoBehaviour
         rb.isKinematic = isKinematic;
     }
 
-    void CheckAndUpgradeSpeed()
-    {
-        if (currentThresholdIndex < speedUpgradeThresholds.Length &&
-            uiManager.score >= speedUpgradeThresholds[currentThresholdIndex])
-        {
-            baseSpeed *= speedMultiplier;
-            boostSpeed *= speedMultiplier;
-
-            currentThresholdIndex++; // move to the next threshold so we don’t repeat this upgrade
-        }
-    }
 
 }

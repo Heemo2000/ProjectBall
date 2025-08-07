@@ -45,13 +45,14 @@ namespace Game
         public void ShowMainMenuScreen()
         {
             mainMenuScreen.SetActive(true);
+
             loadingScreen.SetActive(false);
             gameplayScreen.SetActive(false);
             pauseMenuScreen.SetActive(false);
             gameOverScreen.SetActive(false);
         }
         public void ShowLoadingScreen()
-        
+
         {
             loadingScreen.SetActive(true);
             mainMenuScreen.SetActive(false);
@@ -60,7 +61,7 @@ namespace Game
             gameOverScreen.SetActive(false);
         }
         public void ShowPauseMenu()
-        
+
         {
             pauseMenuScreen.SetActive(true);
             mainMenuScreen.SetActive(false);
@@ -74,7 +75,7 @@ namespace Game
         {
             Debug.Log("Showing gameplay screen");
             gameplayScreen.SetActive(true);
-            
+
             mainMenuScreen.SetActive(false);
             loadingScreen.SetActive(false);
             pauseMenuScreen.SetActive(false);
@@ -93,18 +94,18 @@ namespace Game
         public void QuitGame()
         {
             Debug.Log("Quiting application");
-            Application.Quit();    
+            Application.Quit();
         }
 
         public void RestartGame()
         {
-           Time.timeScale = 1; 
-           SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Restart the current scene
+            Time.timeScale = 1;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Restart the current scene
         }
 
         public void LoadMainMenu()
         {
-            Time.timeScale = 1; 
+            Time.timeScale = 1;
             SceneManager.LoadScene("MainMenu"); // Load the main menu scene
         }
     }
