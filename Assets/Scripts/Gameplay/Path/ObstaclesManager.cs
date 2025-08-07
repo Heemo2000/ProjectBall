@@ -23,8 +23,11 @@ namespace Game.Gameplay
         {
             Debug.Log("Getting obstacle");
             var instance = obstaclePool.Get();
-            instance.transform.position = position;
-            instance.transform.rotation = rotation;
+            if(instance != null)
+            {
+                instance.transform.position = position;
+                instance.transform.rotation = rotation;
+            }
 
             return instance;
         }

@@ -2,70 +2,104 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
+using Game.Core;
 
 namespace Game
 {
     public class UIManager : MonoBehaviour
     {
+        [Header("All Screens")]
+        [SerializeField] private GameObject mainMenuScreen;
+        [SerializeField] private GameObject pauseMenuScreen;
+        [SerializeField] private GameObject gameplayScreen;
+        [SerializeField] private GameObject loadingScreen;
+        [SerializeField] GameObject gameOverScreen;
+
+        [Header("Game Scene")]
+        [SerializeField] private string gameSceneName = "SampleScene";
+
         [Header("Score")]
         [SerializeField] TextMeshProUGUI scoreText;
-        public float score = 0;
-        [SerializeField] float scoreIncrementRate = 10f; // Points per second
         [SerializeField] TextMeshProUGUI scoreGameOver;
 
-        [Header("Pause Game")]
-        [SerializeField] GameObject Pausemenu;
-        [SerializeField] GameObject GameOverScreen;
+        public void SetScoreText(float score)
+        {
+            scoreText.text = Mathf.FloorToInt(score).ToString();
+            scoreGameOver.text = Mathf.FloorToInt(score).ToString();
+        }
 
         void Start()
         {
-            if(Pausemenu != null) Pausemenu.SetActive(false);
-            if (GameOverScreen != null) GameOverScreen.SetActive(false);
-
-        }
-
-
-        void Update()
-        {
-            if (scoreText != null)        // score
-            {
-                float deltaTime = Time.deltaTime;
-                score += deltaTime * scoreIncrementRate; // Increment score by  points per second
-                scoreText.text = "Score: " + Mathf.FloorToInt(score).ToString(); // Update the score text
-
-                float score_gameover = Mathf.FloorToInt(score);
-                scoreGameOver.text = "Your Score\n" + score_gameover.ToString(); // Update the score text in Game Over screen
-            }
-
+            ShowMainMenuScreen();
+            DontDestroyOnLoad(this.gameObject);
+            ServiceLocator.For(this).Register<UIManager>(this);
         }
 
         public void PlayGame()
         {
             Time.timeScale = 1; // Ensure the game is running at normal speed
-            SceneManager.LoadScene("GameScene"); // Load the game scene
+            SceneManager.LoadScene(gameSceneName); // Load the game scene
         }
 
-        public void pausegame()
+        public void ShowMainMenuScreen()
         {
-            Time.timeScale = 0; 
-            Pausemenu.SetActive(true); 
+            mainMenuScreen.SetActive(true);
+
+            loadingScreen.SetActive(false);
+            gameplayScreen.SetActive(false);
+            pauseMenuScreen.SetActive(false);
+            gameOverScreen.SetActive(false);
+        }
+        public void ShowLoadingScreen()
+        
+        {
+            loadingScreen.SetActive(true);
+            mainMenuScreen.SetActive(false);
+            gameplayScreen.SetActive(false);
+            pauseMenuScreen.SetActive(false);
+            gameOverScreen.SetActive(false);
+        }
+        public void ShowPauseMenu()
+        
+        {
+            pauseMenuScreen.SetActive(true);
+            mainMenuScreen.SetActive(false);
+            loadingScreen.SetActive(false);
+            gameplayScreen.SetActive(false);
+            gameOverScreen.SetActive(false);
         }
 
-        public void resumeGame()
+
+        public void ShowGameplayScreen()
         {
-            Time.timeScale = 1; 
-            Pausemenu.SetActive(false); 
+            Debug.Log("Showing gameplay screen");
+            gameplayScreen.SetActive(true);
+            
+            mainMenuScreen.SetActive(false);
+            loadingScreen.SetActive(false);
+            pauseMenuScreen.SetActive(false);
+            gameOverScreen.SetActive(false);
         }
 
-        public void quitGame()
+        public void ShowGameOverScreen()
         {
-            Application.Quit(); 
-           
+            gameOverScreen.SetActive(true);
+            gameplayScreen.SetActive(false);
+            mainMenuScreen.SetActive(false);
+            loadingScreen.SetActive(false);
+            pauseMenuScreen.SetActive(false);
         }
 
-        public void restartGame()
+        public void QuitGame()
         {
-            Time.timeScale = 1; 
+            Debug.Log("Quiting application");
+            Application.Quit();    
+        }
+
+        public void RestartGame()
+        {
+           Time.timeScale = 1; 
            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Restart the current scene
         }
 

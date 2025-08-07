@@ -152,13 +152,13 @@ MonoBehaviour:
     - {fileID: 6910732775422161673}
     _isRoot: 0
   bounds:
-    center: {x: 0, y: 0, z: 9.580736}
-    extents: {x: 4, y: 1.000001, z: 9.580736}
-    max: {x: 4, y: 1.000001, z: 19.161472}
-    min: {x: -4, y: -1.000001, z: 0}
-    size: {x: 8, y: 2.000002, z: 19.161472}
+    center: {x: 0, y: -1, z: 9.580736}
+    extents: {x: 4, y: 1.0000014, z: 9.580736}
+    max: {x: 4, y: 0.0000014305115, z: 19.161472}
+    min: {x: -4, y: -2.0000014, z: 0}
+    size: {x: 8, y: 2.0000029, z: 19.161472}
   builders: []
-  unpacked: 1
+  unpacked: 0
   alwaysDraw: 0
   drawGeneratedSpline: 1
   drawGeneratedSamples: 1
@@ -166,7 +166,7 @@ MonoBehaviour:
   drawEntranceAndExit: 1
   drawBounds: 1
   drawCustomPaths: 1
-  editorChildCount: 1
+  editorChildCount: 2
 --- !u!114 &7717781277434514742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,8 +179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fe2f0fa75719ec4bab48d9a5c042b42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shouldGenerateObstacles: 1
   width: 8
-  height: 2
 --- !u!1 &8611852800172864042
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +209,7 @@ Transform:
   m_GameObject: {fileID: 8611852800172864042}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 0, y: 0, z: 9.6}
+  m_LocalPosition: {x: 0, y: -1, z: 9.6}
   m_LocalScale: {x: 400, y: 956.1472, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
