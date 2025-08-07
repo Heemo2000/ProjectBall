@@ -1,5 +1,7 @@
+using Game;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class LanePlayer : MonoBehaviour
 {
@@ -16,6 +18,7 @@ public class LanePlayer : MonoBehaviour
     public float maxJumpForce = 12f;
     public float jumpChargeRate = 5f;
 
+    [Header("Movement Settings")]
     private float currentSpeed;
     private int currentLane = 1;
     private Vector3 targetPosition;
@@ -31,10 +34,16 @@ public class LanePlayer : MonoBehaviour
 
     private float holdJumpForce;
 
+    public UIManager uiManager; // Reference to UIManager for score updates
+    public int[] speedUpgradeThresholds = { 300, 700, 1200, 1500 };
+    private int currentThresholdIndex = 0;
+    public float speedMultiplier = 2f;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         inputActions = new InputActions();
+
     }
 
     void OnEnable()
@@ -80,7 +89,10 @@ public class LanePlayer : MonoBehaviour
             holdJumpForce = Mathf.Clamp(holdJumpForce, minJumpForce, maxJumpForce);
         }
 
-     //   Debug.Log("Current Speed: " + currentSpeed);
+        Debug.Log("Current Speed: " + currentSpeed);
+        CheckAndUpgradeSpeed();
+
+
     }
 
     void OnTouchStart()
@@ -143,4 +155,17 @@ public class LanePlayer : MonoBehaviour
     {
         targetPosition = new Vector3((currentLane - 1) * laneDistance, transform.position.y, transform.position.z);
     }
+
+    void CheckAndUpgradeSpeed()
+    {
+        if (currentThresholdIndex < speedUpgradeThresholds.Length &&
+            uiManager.score >= speedUpgradeThresholds[currentThresholdIndex])
+        {
+            baseSpeed *= speedMultiplier;
+            boostSpeed *= speedMultiplier;
+
+            currentThresholdIndex++; // move to the next threshold so we don’t repeat this upgrade
+        }
+    }
+
 }

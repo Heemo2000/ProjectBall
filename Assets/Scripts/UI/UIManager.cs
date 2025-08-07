@@ -10,6 +10,7 @@ namespace Game
         [Header("Score")]
         [SerializeField] TextMeshProUGUI scoreText;
         public float score = 0;
+        float Fscore = 0;
         [SerializeField] float scoreIncrementRate = 10f; // Points per second
         [SerializeField] TextMeshProUGUI scoreGameOver;
 
@@ -30,11 +31,16 @@ namespace Game
             if (scoreText != null)        // score
             {
                 float deltaTime = Time.deltaTime;
-                score += deltaTime * scoreIncrementRate; // Increment score by  points per second
-                scoreText.text = "Score: " + Mathf.FloorToInt(score).ToString(); // Update the score text
+                 
+                Fscore += deltaTime * scoreIncrementRate; // Increment score by  points per second
+                score = Mathf.FloorToInt(Fscore);
 
-                float score_gameover = Mathf.FloorToInt(score);
-                scoreGameOver.text = "Your Score\n" + score_gameover.ToString(); // Update the score text in Game Over screen
+
+
+                scoreText.text = "Score: " + score.ToString(); // Update the score text
+
+               
+                scoreGameOver.text = "Your Score\n" + score.ToString(); // Update the score text in Game Over screen
             }
 
         }
