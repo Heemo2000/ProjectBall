@@ -1,4 +1,7 @@
-using Game;
+
+using Dreamteck.Forever;
+using Game.Core;
+using Game.Gameplay;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SocialPlatforms.Impl;
@@ -6,22 +9,23 @@ using UnityEngine.SocialPlatforms.Impl;
 public class LanePlayer : MonoBehaviour
 {
     [Header("Lane Settings")]
-    public float laneDistance = 3f;
-    public float laneChangeSpeed = 10f;
+    [SerializeField] float laneDistance = 3f;
+    [SerializeField] float laneChangeSpeed = 10f;
 
     [Header("Movement")]
-    public float baseSpeed = 5f;
-    public float boostSpeed = 10f;
+    [SerializeField] float baseSpeed = 5f;
+    [SerializeField] float boostSpeed = 10f;
 
     [Header("Jump Settings")]
-    public float minJumpForce = 6f;
-    public float maxJumpForce = 12f;
-    public float jumpChargeRate = 5f;
+    [SerializeField] float minJumpForce = 6f;
+    [SerializeField] float maxJumpForce = 12f;
+    [SerializeField] float jumpChargeRate = 5f;
 
     [Header("Movement Settings")]
     private float currentSpeed;
-    private int currentLane = 1;
-    private Vector3 targetPosition;
+    private int currentLane = 2;
+
+    private LaneRunner runner;
     private Rigidbody rb;
 
     private InputActions inputActions;
@@ -42,6 +46,7 @@ public class LanePlayer : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        runner = GetComponent<LaneRunner>();
         inputActions = new InputActions();
 
     }
@@ -63,21 +68,17 @@ public class LanePlayer : MonoBehaviour
     void Start()
     {
         currentSpeed = baseSpeed;
-        UpdateTargetPosition();
+        rb.isKinematic = false;
     }
 
     void Update()
     {
-        // Forward movement with gradual speed change
+        // Forward movement with gradual speed change, lane distance and lane movement
         float targetSpeed = isHolding ? boostSpeed : baseSpeed;
         currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, 5f * Time.deltaTime);
-        transform.Translate(Vector3.forward * currentSpeed * Time.deltaTime);
-
-        // Lane movement
-        Vector3 moveDirection = targetPosition - transform.position;
-        moveDirection.y = 0;
-        moveDirection.z = 0;
-        transform.Translate(moveDirection * laneChangeSpeed * Time.deltaTime);
+        runner.followSpeed = currentSpeed;
+        runner.laneSwitchSpeed = laneChangeSpeed;
+        runner.width = laneDistance;
 
         // Ground check
         isGrounded = Physics.Raycast(transform.position, Vector3.down, 1.1f);
@@ -89,10 +90,18 @@ public class LanePlayer : MonoBehaviour
             holdJumpForce = Mathf.Clamp(holdJumpForce, minJumpForce, maxJumpForce);
         }
 
-        Debug.Log("Current Speed: " + currentSpeed);
-        CheckAndUpgradeSpeed();
+        //   Debug.Log("Current Speed: " + currentSpeed);
+    }
 
-
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.transform.TryGetComponent<Obstacle>(out Obstacle obstacle))
+        {
+            if(ServiceLocator.ForSceneOf(this).TryGetService<GameManager>(out GameManager gameManager))
+            {
+                gameManager.OnGameOver?.Invoke();
+            }
+        }
     }
 
     void OnTouchStart()
@@ -112,7 +121,7 @@ public class LanePlayer : MonoBehaviour
             if (heldTime < tapThreshold)
             {
                 Jump(minJumpForce); // Quick tap jump
-                Debug.Log("Quick tap jump"+ minJumpForce);
+                Debug.Log("Quick tap jump" + minJumpForce);
             }
             else
             {
@@ -128,32 +137,31 @@ public class LanePlayer : MonoBehaviour
 
     void Jump(float force)
     {
-        rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z); // Reset vertical velocity
         rb.AddForce(Vector3.up * force, ForceMode.Impulse);
         Debug.Log("Jump with force: " + force);
     }
 
     public void MoveLeft()
     {
-        if (currentLane > 0)
+        if (currentLane > 1)
         {
             currentLane--;
-            UpdateTargetPosition();
+            runner.lane = currentLane;
         }
     }
 
     public void MoveRight()
     {
-        if (currentLane < 2)
+        if (currentLane < 3)
         {
             currentLane++;
-            UpdateTargetPosition();
+            runner.lane = currentLane;
         }
     }
 
-    void UpdateTargetPosition()
+    public void SetIsKinematic(bool isKinematic)
     {
-        targetPosition = new Vector3((currentLane - 1) * laneDistance, transform.position.y, transform.position.z);
+        rb.isKinematic = isKinematic;
     }
 
     void CheckAndUpgradeSpeed()
@@ -164,7 +172,7 @@ public class LanePlayer : MonoBehaviour
             baseSpeed *= speedMultiplier;
             boostSpeed *= speedMultiplier;
 
-            currentThresholdIndex++; // move to the next threshold so we don’t repeat this upgrade
+            currentThresholdIndex++; // move to the next threshold so we donâ€™t repeat this upgrade
         }
     }
 

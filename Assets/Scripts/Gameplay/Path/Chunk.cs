@@ -7,15 +7,18 @@ namespace Game.Gameplay
 {
     public class Chunk : MonoBehaviour
     {
-        
+        [SerializeField] private bool shouldGenerateObstacles = false;
         [Min(1.0f)]
         [SerializeField] private float width = 5.0f;
-        [Min(0.1f)]
-        [SerializeField] private float height = 5.0f;
         private LevelSegment segment;
 
         private void GenerateObstacles()
         {
+            if(!shouldGenerateObstacles)
+            {
+                return;
+            }
+
             if(!ServiceLocator.ForSceneOf(this).TryGetService<ObstaclesManager>(out ObstaclesManager obstaclesManager))
             {
                 return;
@@ -29,7 +32,7 @@ namespace Game.Gameplay
 
             int randomObstaclesCount = Random.Range(1, 4);
 
-            Vector3 origin = sample.position + Vector3.up * height / 2.0f;
+            Vector3 origin = sample.position;
             int direction = 0;
             while(randomObstaclesCount > 0)
             {
@@ -72,15 +75,10 @@ namespace Game.Gameplay
             Vector3 left = Vector3.zero;
             Vector3 right = Vector3.zero;
 
-            Vector3 up = Vector3.zero;
-            Vector3 down = Vector3.zero;
-
             if(!Application.isPlaying)
             {
                 left = transform.position - transform.right * width / 2.0f;
                 right = transform.position + transform.right * width / 2.0f;
-                up = transform.position + transform.up * height / 2.0f;
-                down = transform.position - transform.up * height / 2.0f;
             }
             else
             {
@@ -88,13 +86,10 @@ namespace Game.Gameplay
                 segment.Evaluate(0.5f, ref sample);
                 left = sample.position - sample.right * width / 2.0f;
                 right = sample.position + sample.right * width / 2.0f;
-                up = sample.position + sample.up * height / 2.0f;
-                down = sample.position - sample.up * height / 2.0f;
             }
 
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(left, right);
-            Gizmos.DrawLine(up, down);
         }
     }
 }
