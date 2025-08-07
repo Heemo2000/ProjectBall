@@ -33,7 +33,7 @@ namespace Game
         {
             ShowMainMenuScreen();
             DontDestroyOnLoad(this.gameObject);
-            ServiceLocator.For(this).Register<UIManager>(this);
+            ServiceLocator.Global.Register<UIManager>(this);
         }
 
         public void PlayGame()

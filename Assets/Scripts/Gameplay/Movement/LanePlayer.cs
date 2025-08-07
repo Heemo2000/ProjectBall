@@ -1,4 +1,6 @@
 using Dreamteck.Forever;
+using Game.Core;
+using Game.Gameplay;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -82,6 +84,17 @@ public class LanePlayer : MonoBehaviour
         //   Debug.Log("Current Speed: " + currentSpeed);
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.transform.TryGetComponent<Obstacle>(out Obstacle obstacle))
+        {
+            if(ServiceLocator.ForSceneOf(this).TryGetService<GameManager>(out GameManager gameManager))
+            {
+                gameManager.OnGameOver?.Invoke();
+            }
+        }
+    }
+
     void OnTouchStart()
     {
         touchStartTime = Time.time;
@@ -141,4 +154,6 @@ public class LanePlayer : MonoBehaviour
     {
         rb.isKinematic = isKinematic;
     }
+
+
 }

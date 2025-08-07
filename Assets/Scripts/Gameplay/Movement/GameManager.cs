@@ -20,6 +20,11 @@ public class GameManager : MonoBehaviour
         isGameStarted = true;
     }
 
+    private void EndGame()
+    {
+        isGameStarted = false;
+    }
+
     private void Start()
     {
         ServiceLocator.ForSceneOf(this).Register<GameManager>(this);
@@ -29,6 +34,7 @@ public class GameManager : MonoBehaviour
         swipeController.OnSwipeLeft += player.MoveLeft;
         swipeController.OnSwipeRight += player.MoveRight;
         OnGameStarted.AddListener(StartGame);
+        OnGameOver.AddListener(EndGame);
     }
 
     private void Update()
