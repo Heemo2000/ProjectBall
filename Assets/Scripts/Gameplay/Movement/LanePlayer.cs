@@ -1,6 +1,7 @@
 using Dreamteck.Forever;
 using Game.Core;
 using Game.Gameplay;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,6 +25,7 @@ public class LanePlayer : MonoBehaviour
 
     private LaneRunner runner;
     private Rigidbody rb;
+    private Collider playerCollider;
     private GameManager gameManager;
 
     private InputActions inputActions;
@@ -52,7 +54,7 @@ public class LanePlayer : MonoBehaviour
         inputActions.Gameplay.TouchPress.started += ctx => OnTouchStart();
         inputActions.Gameplay.TouchPress.canceled += ctx => OnTouchEnd();
 
-        ServiceLocator.ForSceneOf(this).TryGetService<GameManager>(out gameManager);
+        
     }
 
     void OnDisable()
@@ -66,6 +68,7 @@ public class LanePlayer : MonoBehaviour
     {
         currentSpeed = baseSpeed;
         rb.isKinematic = false;
+        StartCoroutine(WaitForGameManager());
     }
 
     void Update()
@@ -163,9 +166,15 @@ public class LanePlayer : MonoBehaviour
         rb.isKinematic = isKinematic;
     }
 
+    public void SetIsTrigger(bool isTrigger)
+    {
+        playerCollider.isTrigger = isTrigger;
+    }
+
     void CheckAndUpgradeSpeed()
     {
-        if (currentThresholdIndex < speedUpgradeThresholds.Length &&
+
+        if (currentThresholdIndex < speedUpgradeThresholds.Length && gameManager != null &&
             gameManager.CurrentScore >= speedUpgradeThresholds[currentThresholdIndex])
         {
             baseSpeed *= speedMultiplier;

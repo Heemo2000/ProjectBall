@@ -39,7 +39,7 @@ namespace Game
         public void PlayGame()
         {
             Time.timeScale = 1; // Ensure the game is running at normal speed
-            SceneManager.LoadScene(gameSceneName); // Load the game scene
+            SceneManager.LoadSceneAsync(gameSceneName); // Load the game scene
         }
 
         public void ShowMainMenuScreen()
