@@ -27,6 +27,7 @@ public class LanePlayer : MonoBehaviour
 
     private LaneRunner runner;
     private Rigidbody rb;
+    private GameManager gameManager;
 
     private InputActions inputActions;
     private bool isHolding = false;
@@ -38,7 +39,6 @@ public class LanePlayer : MonoBehaviour
 
     private float holdJumpForce;
 
-    public UIManager uiManager; // Reference to UIManager for score updates
     public int[] speedUpgradeThresholds = { 300, 700, 1200, 1500 };
     private int currentThresholdIndex = 0;
     public float speedMultiplier = 2f;
@@ -56,6 +56,8 @@ public class LanePlayer : MonoBehaviour
         inputActions.Enable();
         inputActions.Gameplay.TouchPress.started += ctx => OnTouchStart();
         inputActions.Gameplay.TouchPress.canceled += ctx => OnTouchEnd();
+
+        ServiceLocator.ForSceneOf(this).TryGetService<GameManager>(out gameManager);
     }
 
     void OnDisable()
@@ -90,6 +92,8 @@ public class LanePlayer : MonoBehaviour
             holdJumpForce = Mathf.Clamp(holdJumpForce, minJumpForce, maxJumpForce);
         }
 
+
+        CheckAndUpgradeSpeed();
         //   Debug.Log("Current Speed: " + currentSpeed);
     }
 
@@ -167,7 +171,7 @@ public class LanePlayer : MonoBehaviour
     void CheckAndUpgradeSpeed()
     {
         if (currentThresholdIndex < speedUpgradeThresholds.Length &&
-            uiManager.score >= speedUpgradeThresholds[currentThresholdIndex])
+            gameManager.CurrentScore >= speedUpgradeThresholds[currentThresholdIndex])
         {
             baseSpeed *= speedMultiplier;
             boostSpeed *= speedMultiplier;

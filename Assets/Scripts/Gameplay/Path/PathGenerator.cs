@@ -7,7 +7,7 @@ namespace Game.Gameplay
 {
     public class PathGenerator : MonoBehaviour
     {
-        [SerializeField] private float waitTimeAfterGenStart = 2.0f;
+        //[SerializeField] private float waitTimeAfterGenStart = 2.0f;
         [SerializeField] private LanePlayer player;
         private bool pathInitialized = false;
 
@@ -22,7 +22,7 @@ namespace Game.Gameplay
             Debug.Log("Generating path");
             player.SetIsKinematic(true);
             LevelGenerator.instance.StartGeneration();
-            yield return new WaitForSeconds(waitTimeAfterGenStart);
+            //yield return new WaitForSeconds(waitTimeAfterGenStart);
 
             GameManager gameManager = null;
             UIManager uiManager = null;

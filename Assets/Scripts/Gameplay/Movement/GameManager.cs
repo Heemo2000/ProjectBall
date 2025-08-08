@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
 
     private bool isGameStarted = false;
     private float currentScore = 0.0f;
+
+    public float CurrentScore { get => currentScore;}
+
     private void StartGame()
     {
         isGameStarted = true;
