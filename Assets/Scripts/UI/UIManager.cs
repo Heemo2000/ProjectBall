@@ -39,7 +39,7 @@ namespace Game
         public void PlayGame()
         {
             Time.timeScale = 1; // Ensure the game is running at normal speed
-            SceneManager.LoadScene(gameSceneName); // Load the game scene
+            SceneManager.LoadSceneAsync(gameSceneName); // Load the game scene
         }
 
         public void ShowMainMenuScreen()
@@ -100,7 +100,8 @@ namespace Game
         public void RestartGame()
         {
             Time.timeScale = 1;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Restart the current scene
+            SceneManager.LoadScene("MainMenu"); // Restart the current scene
+            Destroy(gameObject);
         }
 
         public void LoadMainMenu()
