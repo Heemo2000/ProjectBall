@@ -184,4 +184,9 @@ public class LanePlayer : MonoBehaviour
         }
     }
 
+    private IEnumerator WaitForGameManager()
+    {
+        var locator = ServiceLocator.ForSceneOf(this);
+        yield return new WaitUntil(() => locator.TryGetService<GameManager>(out gameManager));
+    }
 }
