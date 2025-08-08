@@ -100,7 +100,8 @@ namespace Game
         public void RestartGame()
         {
             Time.timeScale = 1;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Restart the current scene
+            SceneManager.LoadScene("MainMenu"); // Restart the current scene
+            Destroy(gameObject);
         }
 
         public void LoadMainMenu()
